@@ -29,4 +29,3 @@ jobs:
           npx axe http://localhost:3000/projects/contribute --exit
           npx axe http://localhost:3000/community/users --exit
           npx axe http://localhost:3000/chapters --exit
-          
