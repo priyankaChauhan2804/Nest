@@ -1,0 +1,31 @@
+name: Axe CLI Accessibility Tests
+on: [push, pull_request]
+
+jobs:
+  axe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: List available scripts
+        run: npm run
+
+      - name: Start application
+        run: npm run preview & npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run accessibility tests
+        run: |
+          npx axe http://localhost:3000/ --exit
+          npx axe http://localhost:3000/projects --exit
+          npx axe http://localhost:3000/projects/contribute --exit
+          npx axe http://localhost:3000/community/users --exit
+          npx axe http://localhost:3000/chapters --exit

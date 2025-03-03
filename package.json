@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@axe-core/cli": "^4.10.1",
+    "wait-on": "^8.0.2"
+  }
+}
