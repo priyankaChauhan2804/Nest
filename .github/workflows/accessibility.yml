@@ -20,7 +20,7 @@ jobs:
         run: npm run
 
       - name: Start application
-        run: npm run preview & npx wait-on http://localhost:3000 --timeout 60000
+        run: npm run preview & npx wait-on http://localhost:3000 --timeout 120000
 
       - name: Run accessibility tests
         run: |
