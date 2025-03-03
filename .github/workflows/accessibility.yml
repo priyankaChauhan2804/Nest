@@ -16,8 +16,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: List available scripts
-        run: npm run
+      - name: Build application
+        run: npm run build
 
       - name: Start application
         run: npm run preview & npx wait-on http://localhost:3000 --timeout 120000
@@ -29,3 +29,4 @@ jobs:
           npx axe http://localhost:3000/projects/contribute --exit
           npx axe http://localhost:3000/community/users --exit
           npx axe http://localhost:3000/chapters --exit
+          
