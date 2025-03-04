@@ -33,7 +33,7 @@ jobs:
           VITE_ENVIRONMENT: development                  
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
           VITE_IDX_URL: http://default-idx-url.com       
-        run: npm run preview & npx wait-on http://localhost:3000 --timeout 120000
+        run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
 
       - name: Run accessibility tests
         run: |
