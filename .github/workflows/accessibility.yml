@@ -20,8 +20,9 @@ jobs:
       - name: Build application
         working-directory: ./frontend
         env:
-          VITE_API_URL: http://default-api-url.com  
-          VITE_ENVIRONMENT: development            
+          VITE_API_URL: http://default-api-url.com      
+          VITE_ENVIRONMENT: development                 
+          VITE_GRAPHQL_URL: http://default-graphql-url.com  
         run: npm run build
 
       - name: Start application
