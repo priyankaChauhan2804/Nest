@@ -21,6 +21,7 @@ jobs:
         working-directory: ./frontend
         env:
           VITE_API_URL: http://default-api-url.com  
+          VITE_ENVIRONMENT: development            
         run: npm run build
 
       - name: Start application
