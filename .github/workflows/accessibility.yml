@@ -13,6 +13,12 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
       - name: Install dependencies
         working-directory: ./frontend
         run: npm ci
@@ -30,15 +36,15 @@ jobs:
         working-directory: ./frontend
         env:
           VITE_API_URL: http://default-api-url.com       
-          VITE_ENVIRONMENT: development                  
+          VITE_ENVIRONMENT: development                 
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
-          VITE_IDX_URL: http://default-idx-url.com       
+          VITE_IDX_URL: http://default-idx-url.com      
         run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
 
       - name: Run accessibility tests
         run: |
-          npx axe http://localhost:3000/ --exit
-          npx axe http://localhost:3000/projects --exit
-          npx axe http://localhost:3000/projects/contribute --exit
-          npx axe http://localhost:3000/community/users --exit
-          npx axe http://localhost:3000/chapters --exit
+          npx axe http://localhost:4173/ --exit --browser chrome-headless --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects --exit --browser chrome-headless --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects/contribute --exit --browser chrome-headless --timeout 60000 --verbose
+          npx axe http://localhost:4173/community/users --exit --browser chrome-headless --timeout 60000 --verbose
+          npx axe http://localhost:4173/chapters --exit --browser chrome-headless --timeout 60000 --verbose
