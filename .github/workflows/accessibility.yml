@@ -1,118 +1,57 @@
-name: CI/CD Pipeline
-
+name: Axe CLI Accessibility Tests
 on:
   push:
     branches:
-      - main
+      - main  
   pull_request:
     branches:
-      - main
+      - main 
 
 jobs:
-  build-and-test:
+  axe:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-        
+        uses: actions/checkout@v3
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: './frontend/package-lock.json'
-        
-      - name: Install system dependencies
+
+      - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev
-        
-      - name: Install frontend dependencies
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
+      - name: Install dependencies
         working-directory: ./frontend
         run: npm ci
-        
+
       - name: Build application
         working-directory: ./frontend
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://default-api-url.com' }}
-          VITE_ENVIRONMENT: development
-          VITE_GRAPHQL_URL: ${{ secrets.VITE_GRAPHQL_URL || 'http://default-graphql-url.com' }}
-          VITE_IDX_URL: ${{ secrets.VITE_IDX_URL || 'http://default-idx-url.com' }}
+          VITE_API_URL: http://default-api-url.com        
+          VITE_ENVIRONMENT: development                 
+          VITE_GRAPHQL_URL: http://default-graphql-url.com  
+          VITE_IDX_URL: http://default-idx-url.com       
         run: npm run build
-        
-      - name: Install Playwright
-        working-directory: ./frontend
-        run: |
-          npm install -D @playwright/test axe-playwright
-          npx playwright install-deps chromium
-        
+
       - name: Start application
         working-directory: ./frontend
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://default-api-url.com' }}
-          VITE_ENVIRONMENT: development
-          VITE_GRAPHQL_URL: ${{ secrets.VITE_GRAPHQL_URL || 'http://default-graphql-url.com' }}
-          VITE_IDX_URL: ${{ secrets.VITE_IDX_URL || 'http://default-idx-url.com' }}
+          VITE_API_URL: http://default-api-url.com        
+          VITE_ENVIRONMENT: development                 
+          VITE_GRAPHQL_URL: http://default-graphql-url.com  
+          VITE_IDX_URL: http://default-idx-url.com       
+        run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
+
+      - name: Run accessibility tests
         run: |
-          npm run preview & 
-          npx wait-on http://localhost:4173 --timeout 120000
-        
-      - name: Create Accessibility Test Configuration
-        working-directory: ./frontend
-        run: |
-          mkdir -p a11y-tests
-          cat > playwright-a11y.config.ts << EOL
-          import { defineConfig } from '@playwright/test';
-
-          export default defineConfig({
-            testDir: './a11y-tests',
-            use: {
-              baseURL: 'http://localhost:4173',
-              headless: true,
-            },
-            projects: [
-              {
-                name: 'Accessibility Tests',
-                testMatch: /.*\.a11y\.spec\.ts/,
-              }
-            ]
-          });
-          EOL
-
-          cat > a11y-tests/main.a11y.spec.ts << EOL
-          import { test, expect } from '@playwright/test';
-          import { injectAxe, checkA11y } from 'axe-playwright';
-
-          const pages = [
-            '/',
-            '/projects',
-            '/projects/contribute',
-            '/community/users',
-            '/chapters'
-          ];
-
-          pages.forEach(page => {
-            test(\`Accessibility test for \${page}\`, async ({ page: browserPage }) => {
-              await browserPage.goto(page);
-              await injectAxe(browserPage);
-              const results = await checkA11y(browserPage);
-              
-              if (results.violations.length > 0) {
-                console.log(JSON.stringify(results.violations, null, 2));
-              }
-              
-              expect(results.violations.length).toBe(0);
-            });
-          });
-          EOL
-        
-      - name: Run Accessibility Tests
-        working-directory: ./frontend
-        run: npx playwright test --config=playwright-a11y.config.ts
-        
-      - name: Stop application
-        if: always()
-        run: |
-          pkill -f "npm run preview"
+          npx axe http://localhost:4173/ --exit --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects --exit --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects/contribute --exit --timeout 60000 --verbose
+          npx axe http://localhost:4173/community/users --exit --timeout 60000 --verbose
+          npx axe http://localhost:4173/chapters --exit --timeout 60000 --verbose
           
