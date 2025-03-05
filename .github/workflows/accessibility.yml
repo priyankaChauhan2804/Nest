@@ -29,22 +29,24 @@ jobs:
           VITE_API_URL: http://default-api-url.com       
           VITE_ENVIRONMENT: development                  
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
-          VITE_IDX_URL: http://default-idx-url.com       
+          VITE_IDX_URL: http://default-idx-url.com      
         run: npm run build
 
       - name: Start application
         working-directory: ./frontend
         env:
-          VITE_API_URL: http://default-api-url.com       
-          VITE_ENVIRONMENT: development                 
+          VITE_API_URL: http://default-api-url.com        
+          VITE_ENVIRONMENT: development                  
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
           VITE_IDX_URL: http://default-idx-url.com      
         run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
 
       - name: Run accessibility tests
+        env:
+          CHROME_HEADLESS: true  
         run: |
-          npx axe http://localhost:4173/ --exit --browser chrome-headless --timeout 60000 --verbose
-          npx axe http://localhost:4173/projects --exit --browser chrome-headless --timeout 60000 --verbose
-          npx axe http://localhost:4173/projects/contribute --exit --browser chrome-headless --timeout 60000 --verbose
-          npx axe http://localhost:4173/community/users --exit --browser chrome-headless --timeout 60000 --verbose
-          npx axe http://localhost:4173/chapters --exit --browser chrome-headless --timeout 60000 --verbose
+          npx axe http://localhost:4173/ --exit --browser chrome --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 60000 --verbose
+          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 60000 --verbose
+          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 60000 --verbose
+          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 60000 --verbose
