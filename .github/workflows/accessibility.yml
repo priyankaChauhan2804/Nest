@@ -26,17 +26,17 @@ jobs:
       - name: Build application
         working-directory: ./frontend
         env:
-          VITE_API_URL: http://default-api-url.com       
+          VITE_API_URL: http://default-api-url.com        
           VITE_ENVIRONMENT: development                  
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
-          VITE_IDX_URL: http://default-idx-url.com      
+          VITE_IDX_URL: http://default-idx-url.com       
         run: npm run build
 
       - name: Start application
         working-directory: ./frontend
         env:
           VITE_API_URL: http://default-api-url.com        
-          VITE_ENVIRONMENT: development                  
+          VITE_ENVIRONMENT: development                 
           VITE_GRAPHQL_URL: http://default-graphql-url.com  
           VITE_IDX_URL: http://default-idx-url.com       
         run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
@@ -48,3 +48,4 @@ jobs:
           npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose --chrome-options="--headless --user-data-dir=/tmp/chrome-profile-3 --no-sandbox --disable-dev-shm-usage"
           npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose --chrome-options="--headless --user-data-dir=/tmp/chrome-profile-4 --no-sandbox --disable-dev-shm-usage"
           npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose --chrome-options="--headless --user-data-dir=/tmp/chrome-profile-5 --no-sandbox --disable-dev-shm-usage"
+          
