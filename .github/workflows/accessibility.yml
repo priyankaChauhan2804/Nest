@@ -43,8 +43,9 @@ jobs:
 
       - name: Run accessibility tests
         run: |
-          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose --user-data-dir=/tmp/chrome-profile-1 --no-sandbox --disable-dev-shm-usage"
-          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose --user-data-dir=/tmp/chrome-profile-2 --no-sandbox --disable-dev-shm-usage"
-          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose --user-data-dir=/tmp/chrome-profile-3 --no-sandbox --disable-dev-shm-usage"
-          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose --user-data-dir=/tmp/chrome-profile-4 --no-sandbox --disable-dev-shm-usage"
-          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose --user-data-dir=/tmp/chrome-profile-5 --no-sandbox --disable-dev-shm-usage"
+          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          
