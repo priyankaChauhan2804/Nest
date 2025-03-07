@@ -42,10 +42,12 @@ jobs:
         run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
 
       - name: Run accessibility tests
+        env:
+          CHROME_FLAGS: "--no-sandbox --disable-dev-shm-usage"
         run: |
-          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
-          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
-          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
-          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
-          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose --no-sandbox --disable-dev-shm-usage
+          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose
+          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose
+          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose
+          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose
+          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose
           
