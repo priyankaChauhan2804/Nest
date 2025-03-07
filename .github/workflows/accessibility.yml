@@ -42,13 +42,20 @@ jobs:
         run: npm run preview & npx wait-on http://localhost:4173 --timeout 120000
 
       - name: Run accessibility tests
-        env:
-          CHROME_FLAGS: "--no-sandbox --disable-dev-shm-usage --headless"
         run: |
           mkdir -p /tmp/chrome-profiles
-          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose --chrome-options="--user-data-dir=/tmp/chrome-profiles/profile-1"
-          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose --chrome-options="--user-data-dir=/tmp/chrome-profiles/profile-2"
-          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose --chrome-options="--user-data-dir=/tmp/chrome-profiles/profile-3"
-          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose --chrome-options="--user-data-dir=/tmp/chrome-profiles/profile-4"
-          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose --chrome-options="--user-data-dir=/tmp/chrome-profiles/profile-5"
+          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-1"
+          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose
+
+          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-2"
+          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose
+
+          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-3"
+          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose
+
+          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-4"
+          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose
+
+          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-5"
+          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose
           
