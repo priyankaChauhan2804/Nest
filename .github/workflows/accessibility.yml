@@ -45,23 +45,18 @@ jobs:
         run: |
           mkdir -p /tmp/chrome-profiles
 
-          # Test 1
-          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-1"
-          npx axe http://localhost:4173/ --exit --browser chrome --timeout 120000 --verbose
+          # Function to run axe with a unique Chrome profile
+          run_axe_with_profile() {
+            local url=$1
+            local profile_dir=$2
+            export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=$profile_dir"
+            npx axe "$url" --exit --browser chrome --timeout 120000 --verbose
+          }
 
-          # Test 2
-          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-2"
-          npx axe http://localhost:4173/projects --exit --browser chrome --timeout 120000 --verbose
-
-          # Test 3
-          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-3"
-          npx axe http://localhost:4173/projects/contribute --exit --browser chrome --timeout 120000 --verbose
-
-          # Test 4
-          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-4"
-          npx axe http://localhost:4173/community/users --exit --browser chrome --timeout 120000 --verbose
-
-          # Test 5
-          export CHROME_OPTS="--no-sandbox --disable-dev-shm-usage --headless --user-data-dir=/tmp/chrome-profiles/profile-5"
-          npx axe http://localhost:4173/chapters --exit --browser chrome --timeout 120000 --verbose
+          # Run tests with unique profiles
+          run_axe_with_profile "http://localhost:4173/" "/tmp/chrome-profiles/profile-1"
+          run_axe_with_profile "http://localhost:4173/projects" "/tmp/chrome-profiles/profile-2"
+          run_axe_with_profile "http://localhost:4173/projects/contribute" "/tmp/chrome-profiles/profile-3"
+          run_axe_with_profile "http://localhost:4173/community/users" "/tmp/chrome-profiles/profile-4"
+          run_axe_with_profile "http://localhost:4173/chapters" "/tmp/chrome-profiles/profile-5"
           
